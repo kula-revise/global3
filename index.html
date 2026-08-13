@@ -555,7 +555,7 @@ body.dark .figure figcaption { border-top-color: var(--a1); }
     line-height: 1.45; color: var(--muted); padding-bottom: 0.5rem; margin-bottom: 0.6rem;
     border-bottom: 1px solid var(--rule); }
   .peek-slide p { margin: 0.7rem 0 0; }
-  .srcpeek.multi::after { content: "Swipe, or tap a source above."; display: block;
+  .srcpeek.multi::after { content: "Swipe, or choose a source above."; display: block;
     font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.06em; color: var(--muted);
     padding: 0.55rem 0 0.2rem; }
   .srcpeek.multi:not([open])::after { display: none; }
@@ -613,12 +613,181 @@ body.dark .figure figcaption { border-top-color: var(--a1); }
   .results-actions button { flex: 1; }
   .hidden { display: none !important; }
 
+
+/* ============================================================
+   EARNED STATES READ GREEN
+   Applied identically to the other three source strands.
+
+   This skin gives sea teal the job of "anything the learner
+   earned". Green takes the narrow part of that job, the correct
+   answer itself, and teal keeps the marks, the key facts and
+   the primary button. Green is a new token rather than a
+   repointed --a2, because repointing would turn the strand
+   green and lose the container orange against sea teal that the
+   identity is built on. Teal sits at hue 183 and the green at
+   132, which is 51 degrees of separation, so the two do not
+   read as one colour on a phone.
+
+   The correct option fills solid so it reads as the answer from
+   across the room. The asymmetry is deliberate: the option you
+   got right is loud, the one you picked and got wrong stays a
+   quiet tint with a firm border, because a learner who is
+   already wrong does not need it shouted at them.
+
+   Measured on this skin's own grounds:
+     light  paper text on #2A6335      6.84 : 1
+            the fill against the page  6.15 : 1
+     dark   ink text on #93D98A       10.89 : 1
+   Colour is never the only signal: the tick and the cross carry
+   the state too, which matters because correct green against
+   wrong orange is a hard pair for the commonest form of colour
+   blindness.
+   ============================================================ */
+:root { --ok: #2A6335; --ok-rgb: 42,99,53; --on-ok: #F8FAFB; }
+body.dark { --ok: #93D98A; --ok-rgb: 147,217,138; --on-ok: #101619; }
+
+.option.correct, .option-btn.correct,
+body.dark .option.correct, body.dark .option-btn.correct {
+  background: var(--ok) !important;
+  border: 2px solid var(--ok) !important;
+  box-shadow: 5px 5px 0 rgba(var(--ok-rgb),0.30) !important;
+  color: var(--on-ok) !important;
+}
+.option.correct .opt-text, .option-btn.correct .opt-text,
+.option.correct .opt-letter, .option-btn.correct .opt-letter,
+.option.correct .opt-mark, .option-btn.correct .opt-mark,
+body.dark .option.correct .opt-text, body.dark .option-btn.correct .opt-text,
+body.dark .option.correct .opt-letter, body.dark .option-btn.correct .opt-letter,
+body.dark .option.correct .opt-mark, body.dark .option-btn.correct .opt-mark {
+  color: var(--on-ok) !important;
+}
+.option.correct .opt-letter, .option-btn.correct .opt-letter { opacity: 0.85; }
+
+.option.wrong, .option-btn.wrong {
+  background: var(--no-bg) !important;
+  border: 2px solid var(--a1) !important;
+  box-shadow: none !important;
+}
+.option.wrong .opt-letter, .option.wrong .opt-mark,
+.option-btn.wrong .opt-letter, .option-btn.wrong .opt-mark { color: var(--a1) !important; }
+
+.inter-item.ok, body.dark .inter-item.ok {
+  background: var(--ok) !important;
+  border: 2px solid var(--ok) !important;
+  color: var(--on-ok) !important;
+}
+.inter-item.ok span, .inter-item.ok .rank,
+body.dark .inter-item.ok span, body.dark .inter-item.ok .rank { color: var(--on-ok) !important; }
+.inter-item.ok .rank { opacity: 0.85; }
+.bd-fill { background: var(--ok) !important; }
+
+/* ---- Correctness reads on the sort and the order --------------
+   Both changed only by a pale tint after Check, close enough to
+   the placed state that the screen looked unchanged.
+   -------------------------------------------------------------- */
+.inter-item { justify-content: flex-start; }
+.inter-body { flex: 1 1 auto; }
+.inter-mark { font-weight: 700; font-size: 1.1rem; margin-left: 0.6rem; flex: 0 0 auto; }
+.inter-item.ok .inter-mark { color: var(--on-ok) !important; }
+.inter-item.no { background: var(--no-bg) !important; border: 2px solid var(--a1) !important; }
+.inter-item.no .inter-mark, .inter-item.no .rank { color: var(--a1) !important; }
+.inter-should {
+  display: block; margin-top: 0.3rem;
+  font-family: var(--sans); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--a1);
+}
+
+/* A dashed border is the web's convention for a drop target and there
+   is no drag and drop anywhere in the page. */
+.sort-col { border-style: solid !important; }
+
+/* Sort columns stack on a phone. At 390px a two column grid gives each
+   column about 110px, and a ten word claim wraps to one word a line. */
+@media (max-width: 560px) {
+  .sort-cols { grid-template-columns: 1fr; gap: 0.7rem; }
+  .sort-col { min-height: 3rem; }
+}
+
+/* An inline label that does nothing loses the accent, so the one
+   coloured thing a learner can open still looks openable. */
+.card p > strong:first-child, .source p > strong:first-child { color: var(--ink) !important; }
+.kt-term > summary {
+  color: var(--a2);
+  text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;
+}
+
+/* (2 x 2) is exam notation and nothing in the file explains it. */
+.marks-gloss {
+  font-family: var(--sans); font-size: 0.74rem; line-height: 1.5;
+  color: var(--fade); margin: -0.3rem 0 0.9rem;
+  border-left: 2px solid var(--hair-strong); padding-left: 0.6rem;
+}
+.score-note {
+  font-family: var(--sans); font-size: 0.8rem; line-height: 1.55;
+  color: var(--fade); text-align: center; margin: -0.4rem 0 1.3rem;
+}
+/* The reopen preview shows a sentence of the source now, not a
+   bibliography line, so it stops being uppercased. */
+.peek-who { text-transform: none !important; letter-spacing: 0 !important; }
+
+/* ---- THE TIME RAIL -------------------------------------------
+   A hook line may carry a marker, so a run of days or months
+   reads as a run of days or months rather than as a paragraph
+   broken up. Backwards compatible: a plain string line renders
+   as it always did. The gutter is sized for two short words.
+   ------------------------------------------------------------ */
+.story-line.marked {
+  display: grid; grid-template-columns: 5.2rem 1fr; gap: 0.7rem;
+  align-items: baseline; margin-bottom: 1.15rem;
+}
+.tl-mark {
+  font-family: var(--sans); font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase; color: var(--a1);
+  border-left: 2px solid var(--a1); padding-left: 0.5rem; line-height: 1.5;
+}
+.tl-text { display: block; }
+.story-line.marked + .story-line:not(.marked) { margin-top: 1.8rem; }
+.story-line.marked.last {
+  color: var(--clay) !important; font-weight: 400 !important; font-style: normal !important;
+}
+.story-line.marked.last::before { display: none !important; }
+.story-line.last { font-style: normal !important; }
+@media (max-width: 400px) {
+  .story-line.marked { grid-template-columns: 4.8rem 1fr; gap: 0.6rem; }
+}
+
+
+/* ---- Two things caught by rendering at 390px -----------------
+
+   1. The wrong-answer glyph and letter take --a1, which composites
+      to 4.00 and 3.92 against the wrong-option tint on the dark
+      ground. The tick and the cross are what carry the state for a
+      learner who cannot separate the two hues, so the glyph has to
+      be legible on its own. 5.37 after this.
+
+   2. The top bar tag is set to ellipsis on one line, and
+      "Kula Revise . Grade 12 . Globalisation" is long enough to be
+      cut on a 390px screen: the learner saw the strand name
+      truncated on every step. The tag now shrinks a step and
+      drops the leading brand words on narrow screens rather than
+      losing the end of the strand name.
+   -------------------------------------------------------------- */
+body.dark .option.wrong .opt-letter, body.dark .option.wrong .opt-mark,
+body.dark .option-btn.wrong .opt-letter, body.dark .option-btn.wrong .opt-mark,
+body.dark .inter-item.no .inter-mark, body.dark .inter-item.no .rank {
+  color: #F2A57A !important;
+}
+@media (max-width: 430px) {
+  .top-meta { font-size: 0.58rem !important; letter-spacing: 0.06em !important; }
+  .top-meta #lesson-tag { min-width: 0; }
+}
+
 </style>
 </head>
-<body>
+<body class="dark">
 <div class="container">
   <div class="top-bar hidden" id="top-bar">
-    <div class="top-meta"><span id="lesson-tag">Kula Revise &middot; Grade 12 &middot; Globalisation</span><span class="top-count" id="step-count"></span></div>
+    <div class="top-meta"><span id="lesson-tag">Grade 12 &middot; Globalisation</span><span class="top-count" id="step-count"></span></div>
     <div class="track"><div class="fill" id="fill"></div></div>
   </div>
   <div id="stage"></div>
@@ -681,34 +850,47 @@ const RESULTS = {
 const FLOW = [
   {
     "type": "story",
-    "marker": "A neighbour",
-    "markerLabel": "Any street &middot; any year",
+    "marker": "The message that proved nothing",
+    "markerLabel": "Across the Atlantic &middot; August 1858",
     "lines": [
-      "Two people describe the same neighbour to you.",
-      "One says he is generous, because he lends money whenever anyone asks.",
-      "The other says he keeps a written list of everyone who owes him.",
-      "Both describe one man.",
-      "You already know that two accounts can agree on every fact and still point opposite ways. Now imagine the lender is a country and the borrower is a continent."
+      {
+        "text": "A cable is laid along the sea floor between Ireland and Newfoundland, and a message crosses it for the first time."
+      },
+      {
+        "text": "The Queen sends her **congratulations upon the successful completion of this great international work.**"
+      },
+      {
+        "text": "Cities hold parades. Newspapers print the message on the front page as proof that the ocean has been beaten."
+      },
+      {
+        "text": "The engineers reading the signal already know it is getting weaker every day."
+      },
+      {
+        "text": "**The message cannot say that.**"
+      },
+      {
+        "text": "The cable failed within a month. In this lesson a photograph of an opening day tells you a great deal, and there are things it was never able to show."
+      }
     ]
   },
   {
     "type": "question",
     "kind": "instinct",
-    "q": "Which of the two accounts is the one you would want before borrowing from him?",
+    "q": "What can the Queen's message not tell you?",
     "options": [
-      "The first one, because it tells you that he will really say yes",
-      "The second one, because it tells you what happens after he says yes",
-      "Both of them, because one covers the offer and one covers what follows",
-      "Neither of them, because neither has told you what he charges you"
+      "That a cable had been laid between Ireland and Newfoundland",
+      "That a message had crossed the ocean along that cable",
+      "Whether the cable would still be working the following month",
+      "That the two governments wanted the cable to be a success"
     ],
     "correct": 2,
-    "explanation": "Nothing is scored here. Both accounts are true. Neither account is complete. The first one tells you the man really does lend. The second one tells you he keeps a record of it. You are about to read a source that shows an offer. That source cannot show you what happened afterwards.",
+    "explanation": "There is no score on this one. The first, second and fourth are all things the message itself demonstrates. The third had not happened yet, so no wording could have covered it. That is not a fault in the message and it does not make it unreliable. In the exam, saying a source cannot be trusted is a different answer from saying what it was never able to show.",
     "noSource": true
   },
   {
     "type": "content",
     "tag": "The turn",
-    "html": "<h2>The word for what you just did</h2><p>You did not say either account was wrong. You said each one stops short.</p><p>What a source cannot tell you is called its <strong>limitations</strong>. This is not the same as reliability. Reliability asks whether you can trust what a source says. Limitations asks what it does not cover at all.</p><p>A source can be completely honest and still be badly limited. That is why the top marks in Paper 2 ask for <strong>own knowledge</strong> as well as the sources. Own knowledge is what you bring to fill the gap.</p>",
+    "html": "<h2>The word for what you just did</h2><p>You did not say the message was wrong. You said it stops short of the thing you most wanted to know.</p><p>What a source cannot tell you is called its <strong>limitations</strong>. This is not the same as reliability. Reliability asks whether you can trust what a source says. Limitations asks what it does not cover at all.</p><p>A source can be completely honest and still be badly limited. That is why the top marks in Paper 2 ask for <strong>own knowledge</strong> as well as the sources. Own knowledge is what you bring to fill the gap.</p>",
     "remember": "Reliability and limitations are two different questions. An honest source can still leave out the thing you need.",
     "terms": [
       {
@@ -728,7 +910,7 @@ const FLOW = [
   {
     "type": "content",
     "tag": "The evidence",
-    "html": "<h2>The Cold War ends and the money changes</h2><p>For forty years the Soviet Union and the United States had given aid and weapons to African governments in order to keep them on side.</p><p>When the Soviet Union broke up in 1991 that competition stopped. Aid fell, and Western lenders began attaching political conditions to what was left, asking for multi-party elections and less corruption.</p><p>So African governments needed investment, and the old sources of it had either gone or come with new demands. That is the opening this lesson is about.</p>",
+    "html": "<h2>The Cold War ends and the money changes</h2><p>For forty years the Soviet Union and the United States gave aid and weapons to African governments. Each wanted those governments on its own side.</p><p>When the Soviet Union broke up in 1991 that competition stopped. Aid fell, and Western lenders began attaching political conditions to what was left, asking for multi-party elections and less corruption.</p><p>So African governments needed investment, and the old sources of it had either gone or come with new demands. That is the opening this lesson is about.</p>",
     "remember": "The end of the Cold War removed a reason for the superpowers to pay attention to Africa. That gap is what the next lender walked into.",
     "terms": [
       {
@@ -748,7 +930,7 @@ const FLOW = [
   {
     "type": "content",
     "tag": "The evidence",
-    "html": "<h2>China opens</h2><p>From 1978 the Chinese government began letting private firms trade and letting foreign companies invest. Areas along the coast were set aside where the rules were looser.</p><p>Factories in those areas made goods for sale abroad. Chinese exports grew, and so did the need for two things: raw materials to feed the factories, and customers to buy what came out of them.</p><p>Africa had both. That is the plain economic reason behind everything in the rest of this lesson.</p>",
+    "html": "<h2>China opens</h2><p>From 1978 the Chinese government began letting private firms trade and letting foreign companies invest. Areas along the coast were set aside where the rules were looser.</p><p>Factories in those areas made goods for sale abroad. Chinese exports grew, and two needs grew with them. Raw materials to feed the factories, and customers to buy what came out of them.</p><p>Africa had both. That is the plain economic reason behind everything in the rest of this lesson.</p>",
     "remember": "China's opening from 1978 is the cause. Its trade with Africa is the effect. Get them in that order.",
     "terms": [
       {
@@ -768,7 +950,7 @@ const FLOW = [
   {
     "type": "content",
     "tag": "The evidence",
-    "html": "<h2>From aid to trade</h2><p>China had helped build things in Africa before. In the 1970s it paid for and built a railway between Zambia and Tanzania, at a time when it had far less money than it has now.</p><p>What changed after 2000 was the size and the reason. The <strong>Forum on China-Africa Cooperation</strong> was set up in 2000 as a standing meeting between China and African governments. Chinese firms built roads, ports, stadiums and railways, paid for by Chinese loans.</p><p>By 2009 China was Africa's largest trading partner. From 2013 much of the building came under one programme, the <strong>Belt and Road Initiative</strong>.</p>",
+    "html": "<h2>From aid to trade</h2><p>China had helped build things in Africa before. In the 1970s it paid for and built a railway between Zambia and Tanzania. China had far less money then than it has now.</p><p>What changed after 2000 was the size and the reason. The <strong>Forum on China-Africa Cooperation</strong> was set up in 2000 as a standing meeting between China and African governments. Chinese firms built roads, ports, stadiums and railways, paid for by Chinese loans.</p><p>By 2009 China was Africa's largest trading partner. From 2013 much of the building came under one programme, the <strong>Belt and Road Initiative</strong>.</p>",
     "remember": "1970s aid, 2000 FOCAC, 2009 largest trading partner, 2013 Belt and Road. That sequence is the answer to how the relationship changed.",
     "terms": [
       {
@@ -1039,7 +1221,7 @@ const FLOW = [
   {
     "type": "content",
     "tag": "Beyond the exam",
-    "html": "<h2>What this is worth outside the exam</h2><p>The move in this lesson was noticing where a source stops.</p><p>A photograph of a new building, a figure in an advert, a report on a project that has just opened. All of them show the moment somebody chose to record. None of them shows what happened afterwards.</p><p>Asking what would have to be true later, and where you would go to find out, is the same move you just made on a railway station.</p>",
+    "html": "<h2>What this is worth outside the exam</h2><p>The move in this lesson was noticing where a source stops.</p><p>A photograph of a new building, a figure in an advert, a report on a project that has just opened. All of them show the moment somebody chose to record. None of them shows what happened afterwards.</p><p>Ask what would have to be true later, and where you would go to check. That is the same move you just made on a railway station.</p>",
     "remember": "When something is shown to you at its best moment, ask what the next year looked like.",
     "terms": []
   }
@@ -1131,10 +1313,13 @@ function firstContentIdx(){
 function renderStory(item){
   const lines = item.lines.map((l,i)=>{
     const last = i===item.lines.length-1 ? " last" : "";
-    return `<div class="story-line${last}">${esc(l)}</div>`;
+    const o = (typeof l === "string") ? { text: l } : l;
+    const body = esc(o.text).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    const mk = o.mark ? `<span class="tl-mark">${esc(o.mark)}</span>` : "";
+    return `<div class="story-line${last}${o.mark?" marked":""}">${mk}<span class="tl-text">${body}</span></div>`;
   }).join("");
   stage.innerHTML = `
-    <div class="story">
+    <div class="story${item.side?" story-"+item.side:""}">
       <div class="story-num">${esc(item.marker)}</div>
       <div class="story-unit">${esc(item.markerLabel||"")}</div>
       <div class="story-rule"></div>
@@ -1153,7 +1338,7 @@ function renderStory(item){
 function ktStrip(terms){
   if(!terms || !terms.length) return "";
   const chips = terms.map(t=>`<details class="kt-term"><summary>${esc(t.term)}</summary><div class="kt-def">${esc(t.def)}</div></details>`).join("");
-  return `<div class="kt"><div class="kt-label">Key terms &middot; tap to open</div><div class="kt-row">${chips}</div></div>`;
+  return `<div class="kt"><div class="kt-label">Key terms &middot; open any of these</div><div class="kt-row">${chips}</div></div>`;
 }
 function rememberBox(text){
   if(!text) return "";
@@ -1181,7 +1366,7 @@ function renderCarousel(item){
       ${item.tag?`<div class="stage-tag">${esc(item.tag)}</div>`:""}
       ${item.heading?`<h2>${esc(item.heading)}</h2>`:""}
       <div class="car-wrap">
-        <div class="car-prompt" id="car-prompt">${allRead?`That is all ${cards.length}. Continue is unlocked.`:`Tap the arrows to read all ${cards.length}. Continue unlocks when you have.`}</div>
+        <div class="car-prompt" id="car-prompt">${allRead?`That is all ${cards.length}. Continue is unlocked.`:`Use the arrows to read all ${cards.length}. Continue unlocks when you have.`}</div>
         <div class="car-frame"><div class="car-card">${body}</div></div>
         <div class="car-nav">
           <div class="car-dots">${dots}</div>
@@ -1237,11 +1422,24 @@ function sourcePeek(item){
 function peekShell(list){
   const many = list.length > 1;
   const cue = many
-    ? `Tap to read the ${list.length} sources again`
-    : `Tap to read ${esc(list[0].label)} again`;
+    ? `Open the ${list.length} sources again`
+    : `Open ${esc(/^The /.test(list[0].label) ? list[0].label.charAt(0).toLowerCase()+list[0].label.slice(1) : list[0].label)} again`;
+  // Preview the source, not its bibliography, and never cut a word in half.
+  const peekWords = (html)=>{
+    let s = String(html||"")
+      .replace(/<div class="(src-imprint|cable-head)"[\s\S]*?<\/div>/g," ")
+      .replace(/<[^>]*>/g," ")
+      .replace(/&nbsp;/g," ").replace(/&hellip;/g,"...")
+      .replace(/\s+/g," ").trim();
+    if(s.length<=84) return esc(s);
+    let cut = s.slice(0,84);
+    const sp = cut.lastIndexOf(" ");
+    if(sp>40) cut = cut.slice(0,sp);
+    return esc(cut) + "&hellip;";
+  };
   const who = many
     ? list.map(s=>esc(s.label)).join(" &middot; ")
-    : esc(stripTags(list[0].attr)).slice(0,90);
+    : peekWords(list[0].body);
   const tabs = many
     ? `<div class="peek-tabs" role="tablist">${list.map((s,i)=>
         `<button class="peek-tab${i===list.length-1?" on":""}" data-peek="${i}" role="tab">${esc(s.label)}</button>`).join("")}</div>`
@@ -1303,6 +1501,23 @@ function renderSource(item){
   bindToggles();
 }
 
+
+// A mark allocation is part of the teaching, but the notation is never
+// explained anywhere. Gloss it once, on the first assessed question that
+// carries one, pinned to that question so Back and forward show the same
+// screen twice.
+let _glossAt = null;
+function marksGloss(marks){
+  if(!marks || (_glossAt!==null && _glossAt!==state.idx)) return "";
+  const m = String(marks).match(/\((\d+)\s*x\s*(\d+)\)/);
+  if(!m) return "";
+  _glossAt = state.idx;
+  const pts = parseInt(m[1],10), each = parseInt(m[2],10);
+  const mk = each===1 ? "1 mark" : each+" marks";
+  const p = pts===1 ? `one point, worth ${mk}` : `${pts} separate points, each worth ${mk}`;
+  return `<div class="marks-gloss">That bracket is exam notation. It means the marker wants ${p}.</div>`;
+}
+
 // ============ QUESTION (mcq / order / sort) ============
 function renderQuestion(item){
   if(item.mode==="order") return renderOrder(item);
@@ -1331,7 +1546,7 @@ function renderMCQ(item){
   });
   stage.innerHTML = `
     <div class="card">
-      <div class="q-meta">${chip}${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>
+      <div class="q-meta">${chip}${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>${marksGloss(item.marks)}
       ${sourcePeek(item)}
       <div class="q-text">${item.q}</div>
       <div class="options">${opts}</div>
@@ -1354,18 +1569,31 @@ function renderOrder(item){
   const placed = st.placed;                       // array of content indices in chosen order
   const remaining = item.items.map((_,i)=>i).filter(i=>!placed.includes(i));
   let placedHtml = placed.map((ci,pos)=>{
-    let cls="inter-item inter-placed";
-    if(answered){ cls = "inter-item "+(ci===item.answer[pos]?"ok":"no"); }
-    return `<button class="${cls}" data-placed="${ci}" ${answered?"disabled":""}><span class="rank">${pos+1}</span><span>${esc(item.items[ci])}</span></button>`;
+    let cls="inter-item inter-placed", mark="", should="";
+    if(answered){
+      const right = ci===item.answer[pos];
+      cls = "inter-item "+(right?"ok":"no");
+      mark = `<span class="inter-mark">${right?"&#10003;":"&#10007;"}</span>`;
+      if(!right) should = `<span class="inter-should">belongs at ${item.answer.indexOf(ci)+1}</span>`;
+    }
+    return `<button class="${cls}" data-placed="${ci}" ${answered?"disabled":""}><span class="rank">${pos+1}</span><span class="inter-body">${esc(item.items[ci])}${should}</span>${mark}</button>`;
   }).join("");
-  let poolHtml = remaining.map(ci=>`<button class="inter-item" data-pool="${ci}"><span class="rank">&bull;</span><span>${esc(item.items[ci])}</span></button>`).join("");
+  // The pool is shuffled once and remembered, so an order question can never
+  // present its events already close to sequence.
+  if(!st.pool){
+    const a=item.items.map((_,i)=>i);
+    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    st.pool=a;
+  }
+  const poolOrder = st.pool.filter(ci=>remaining.includes(ci));
+  let poolHtml = poolOrder.map(ci=>`<button class="inter-item" data-pool="${ci}"><span class="rank">&bull;</span><span>${esc(item.items[ci])}</span></button>`).join("");
   stage.innerHTML = `
     <div class="card">
-      <div class="q-meta"><span class="chip ${item.level?chipCls(item.level):"chip-instinct"}">${item.level||"Instinct"}</span>${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>
+      <div class="q-meta"><span class="chip ${item.level?chipCls(item.level):"chip-instinct"}">${item.level||"Instinct"}</span>${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>${marksGloss(item.marks)}
       ${sourcePeek(item)}
       <div class="q-text">${item.q}</div>
       <div class="inter">
-        <div class="inter-pool" id="placed">${placedHtml||`<div style="color:var(--fade);font-size:0.9rem;padding:0.4rem 0;">Tap an event below to start putting them in order.</div>`}</div>
+        <div class="inter-pool" id="placed">${placedHtml||`<div style="color:var(--fade);font-size:0.9rem;padding:0.4rem 0;">Choose an event below to start putting them in order.</div>`}</div>
         ${remaining.length?`<div style="height:1px;background:rgba(27,42,51,0.14);margin:0.9rem 0;"></div><div class="inter-pool" id="pool">${poolHtml}</div>`:""}
       </div>
       ${answered?`<div class="explanation"><div class="expl-label">Why</div><div class="expl-text">${resolveOpts(item.explanation,null)}</div></div>`:""}
@@ -1389,9 +1617,13 @@ function renderSort(item){
   const unplaced = item.items.map((_,i)=>i).filter(i=>!(i in col));
   const colCards = (which)=>item.items.map((it,ci)=>{
     if(col[ci]!==which) return "";
-    let cls="inter-item inter-placed";
-    if(answered) cls="inter-item "+(item.answer[ci]===which?"ok":"no");
-    return `<button class="${cls}" data-un="${ci}" ${answered?"disabled":""}><span>${esc(it)}</span></button>`;
+    let cls="inter-item inter-placed", mark="";
+    if(answered){
+      const right = item.answer[ci]===which;
+      cls="inter-item "+(right?"ok":"no");
+      mark = `<span class="inter-mark">${right?"&#10003;":"&#10007;"}</span>`;
+    }
+    return `<button class="${cls}" data-un="${ci}" ${answered?"disabled":""}><span class="inter-body">${esc(it)}</span>${mark}</button>`;
   }).join("");
   const pool = unplaced.map(ci=>`
     <div class="inter-item" style="flex-direction:column;align-items:stretch;cursor:default;">
@@ -1403,7 +1635,7 @@ function renderSort(item){
     </div>`).join("");
   stage.innerHTML = `
     <div class="card">
-      <div class="q-meta"><span class="chip ${item.level?chipCls(item.level):"chip-instinct"}">${item.level||"Instinct"}</span>${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>
+      <div class="q-meta"><span class="chip ${item.level?chipCls(item.level):"chip-instinct"}">${item.level||"Instinct"}</span>${item.marks?`<span class="marks">${esc(item.marks)}</span>`:""}</div>${marksGloss(item.marks)}
       ${sourcePeek(item)}
       <div class="q-text">${item.q}</div>
       <div class="inter">
@@ -1524,11 +1756,12 @@ function showResults(){
       <h1 class="results-title">${esc(RESULTS.title||"Where you stand")}</h1>
     </div>
     <div class="score-row">
-      <div class="score-block"><div class="score-num">${correct}<span class="score-den">/${total}</span></div><div class="score-label">Correct</div></div>
+      <div class="score-block"><div class="score-num">${correct}<span class="score-den">/${total}</span></div><div class="score-label">Questions right</div></div>
       <div class="score-block"><div class="score-num">${pct}<span class="score-den">%</span></div><div class="score-label">Accuracy</div></div>
       <div class="score-block"><div class="score-word">${band}</div><div class="score-label">Band</div></div>
     </div>
     <div class="grade-desc">${desc}</div>
+    <div class="score-note">This lesson counts questions. The marks printed on each question are what the same question is worth in the exam, which is why the two numbers differ.</div>
     <div class="breakdown"><div class="breakdown-label">By skill</div>${rows}</div>
     <div class="results-actions">
       <button class="btn-secondary" id="restart-btn">Restart lesson</button>
@@ -1541,7 +1774,7 @@ function showResults(){
   });
   /* The button at the end of the lesson is the thing that continues. It does
      not point at a control somewhere else on the page. */
-  document.getElementById("finish-btn").addEventListener("click",()=>{ KulaLMS.advance(); });
+  document.getElementById("finish-btn").onclick = ()=>{ KulaLMS.advance(); };
   KulaLMS.completed();
 }
 
@@ -1572,10 +1805,17 @@ renderCover();
    To port this to an essay unit, set NATIVE to "dark", FLIP to "light" and CLS
    to "bright". Nothing else changes. */
 (function(){
-  var NATIVE = "light";   // the mode this unit is designed in
-  var FLIP   = "dark";    // the mode the toggle offers
+  var NATIVE = "light";   // the mode the stylesheet produces with no class on body
+  var FLIP   = "dark";    // the mode the class produces
   var CLS    = "dark";    // the class that produces FLIP in this unit
-  try{ if(localStorage.getItem("kula-mode")===FLIP){ document.body.classList.add(CLS); } }catch(e){}
+  /* The unit OPENS in dark. body carries the class in the markup rather than
+     having it added here, so there is no flash of the light ground before
+     this script runs at the foot of the document. All this block does is
+     honour a learner who has already chosen otherwise. */
+  var stored = null;
+  try{ stored = localStorage.getItem("kula-mode"); }catch(e){}
+  if(stored === NATIVE) document.body.classList.remove(CLS);
+  else if(stored === FLIP) document.body.classList.add(CLS);
   var SUN='<circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>';
   var MOON='<path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/>';
   var b=document.getElementById("kula-mode-toggle");
